@@ -300,15 +300,12 @@ public class MediaPlayer {
     mContext = ctx;
 
     String LIB_ROOT;
-	if(VERSION.SDK_INT > 23) {
-    	LIB_ROOT = Vitamio.getLibraryPath();
-    }
-    else if(VERSION.SDK_INT > 20) {
-        LIB_ROOT = "";
-    }
-    else{
-    	LIB_ROOT = Vitamio.getLibraryPath();
-    }
+      if(VERSION.SDK_INT > 20 && VERSION.SDK_INT < 24) {
+          LIB_ROOT = "";
+      }
+      else{
+          LIB_ROOT = Vitamio.getLibraryPath();
+      }
 
     if (preferHWDecoder) {
       if (!NATIVE_OMX_LOADED.get()) {
@@ -357,21 +354,22 @@ public class MediaPlayer {
     			LIB_ROOT=Vitamio.getDataPath();
     		}
     	}
-    	
-    	  if(LIB_ROOT==null){
-    	    	System.loadLibrary("stlport_shared");
-    	    	System.loadLibrary("vplayer");	
-    	    	loadFFmpeg_native("libffmpeg.so");
-    	    	loadVVO_native("libvvo.9.so");
-    	    	loadVVO_native("libvvo.9.so");
-    	    	loadVAO_native("libvao.0.so");
-    	    }else{
-    	    	System.load(LIB_ROOT+ "libstlport_shared.so");
-    	    	System.load(LIB_ROOT+ "libvplayer.so");
-    	    	loadFFmpeg_native(LIB_ROOT+"libffmpeg.so");
-    	    	loadVVO_native(LIB_ROOT+ "libvvo.9.so");
-    	    	loadVAO_native( LIB_ROOT+ "libvao.0.so");
-    	    }  
+
+        if(LIB_ROOT==null){
+            System.loadLibrary("stlport_shared");
+            System.loadLibrary("vplayer");
+            loadFFmpeg_native("libffmpeg.so");
+            loadVVO_native("libvvo.9.so");
+            loadVVO_native("libvvo.9.so");
+            loadVAO_native("libvao.0.so");
+        }else{
+            System.loadLibrary("stlport_shared");
+            System.loadLibrary("vplayer");
+            loadFFmpeg_native("libffmpeg.so");
+            loadVVO_native("libvvo.9.so");
+            loadVVO_native("libvvo.9.so");
+            loadVAO_native("libvao.0.so");
+        }
     	  
     }catch(Exception e){
     	Log.e("load library err ");
