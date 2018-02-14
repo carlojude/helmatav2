@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="thesis.icpep.myapplication.Online">
+    tools:context="thesis.icpep.helmata.Online">
 
     <io.vov.vitamio.widget.VideoView
         android:id="@+id/videoView"
@@ -16,4 +16,24 @@
 
     </io.vov.vitamio.widget.VideoView>
 
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="40dp"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fabStop"
+        android:layout_alignStart="@+id/fabStop"
+        android:layout_alignTop="@+id/fabStop"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 </RelativeLayout>
