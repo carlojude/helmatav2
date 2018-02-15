@@ -4,36 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="thesis.icpep.helmata.Online">
+    tools:context="thesis.icpep.helmata.Online"
+    android:background="@color/colorAccent">
 
     <io.vov.vitamio.widget.VideoView
         android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:foregroundGravity="center"
+        android:layout_centerInParent="true">
 
     </io.vov.vitamio.widget.VideoView>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabStop"
+    <ToggleButton
+        android:id="@+id/toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="40dp"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        android:layout_marginBottom="11dp"
+        android:text="Start"
+        android:textOff="Record"
+        android:textOn="Stop recording"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/fabStop"
-        android:layout_alignStart="@+id/fabStop"
-        android:layout_alignTop="@+id/fabStop"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fabStop"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_marginBottom="13dp"-->
+        <!--android:layout_marginEnd="14dp"-->
+        <!--android:layout_marginRight="14dp"-->
+        <!--android:layout_toRightOf="@+id/fab"-->
+        <!--app:srcCompat="@android:drawable/ic_media_pause" />-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/fabStop"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_marginBottom="23dp"-->
+        <!--app:srcCompat="@android:drawable/ic_menu_camera"-->
+        <!--android:background="@color/transparent"/>-->
 </RelativeLayout>

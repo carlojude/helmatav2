@@ -6,13 +6,19 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity
+
+
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -24,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_online) {
 
         } else if (id == R.id.nav_offline) {
@@ -98,4 +104,25 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+//    public void getIp(){
+//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+//        View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
+//
+//        final EditText ip_add = (EditText)findViewById(R.id.txtIp);
+//        Button confirm = (Button)findViewById(R.id.add);
+//        Button cancel = (Button)findViewById(R.id.cancel);
+//
+//        confirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(MainActivity.this, Online.class);
+//                i.putExtra("ip", ip_add.getText().toString());
+//            }
+//        });
+//
+//        mBuilder.setView(mview);
+//        AlertDialog dialog = mBuilder.create();
+//        dialog.show();
+//    }
 }
