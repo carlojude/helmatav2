@@ -28,7 +28,8 @@
         <activity
             android:name=".Offline"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Online"></activity>
+        <activity android:name=".Online" />
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>

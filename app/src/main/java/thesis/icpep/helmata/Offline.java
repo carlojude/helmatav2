@@ -2,6 +2,7 @@ package thesis.icpep.helmata;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
@@ -37,6 +38,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,6 +65,7 @@ public class Offline extends AppCompatActivity {
     private String formattedTime;
     private String ip;
     private String curIp;
+    private String path;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -75,7 +79,14 @@ public class Offline extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
+
+        File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
+        if (!f.exists()) {
+            f.mkdirs();
+            path = f.getAbsolutePath();
+        }
 
         //get date and time
         Date c = Calendar.getInstance().getTime();
@@ -234,8 +245,7 @@ public class Offline extends AppCompatActivity {
             mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mMediaRecorder.setOutputFile(Environment
-                    .getExternalStoragePublicDirectory(Environment
-                            .DIRECTORY_DOWNLOADS) + "/" + formattedDate + "_" + formattedTime + ".mp4");
+                    .getExternalStoragePublicDirectory("Helmata") + "/" + formattedDate + "_" + formattedTime + ".mp4");
             mMediaRecorder.setVideoSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
