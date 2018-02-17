@@ -77,19 +77,18 @@ public class Offline extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_online);
 
-
+        //get date and time
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
+        //set format of date and time
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         formattedDate = df.format(c);
 
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
         formattedTime = tf.format(c);
 
-//        Intent intent = getIntent();
-//        String ip = intent.getExtras().getString("ip");
-
+        //pass data from mainactivity
         SharedPreferences prefs = getSharedPreferences("IPADD", MODE_PRIVATE);
         ip = prefs.getString("ip", null);
         curIp = ip;
@@ -98,8 +97,8 @@ public class Offline extends AppCompatActivity {
         videoView = this.findViewById(R.id.videoView);
 
         //set height of videoView
-        int width = getResources().getDisplayMetrics().widthPixels/3;
-        int hei=getResources().getDisplayMetrics().heightPixels/3;
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int hei=getResources().getDisplayMetrics().heightPixels;
 
         videoView.setLayoutParams(new RelativeLayout.LayoutParams(width, hei));
 
@@ -110,9 +109,10 @@ public class Offline extends AppCompatActivity {
         //Set the path of Video or URI
         videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/unicast"));
 
-
         //Set the focus
         videoView.requestFocus();
+
+        //play stream
         videoView.start();
 
         //Record Screen
@@ -125,6 +125,7 @@ public class Offline extends AppCompatActivity {
         mProjectionManager = (MediaProjectionManager) getSystemService
                 (Context.MEDIA_PROJECTION_SERVICE);
 
+        //record/stop buttons
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final FloatingActionButton fabStop = (FloatingActionButton) findViewById(R.id.fabStop);
 
@@ -183,39 +184,9 @@ public class Offline extends AppCompatActivity {
                 finalFab.setVisibility(View.VISIBLE);
             }
         });
-
-
-
-//        final FloatingActionButton fabStop = (FloatingActionButton) findViewById(R.id.fabStop);
-//        fabStop.setEnabled(false);
-//
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                if(fab.getVisibility() == View.VISIBLE){
-////                    fab.setVisibility(View.GONE);
-////                    fabStop.setVisibility(View.VISIBLE);
-//                    fabStop.setEnabled(true);
-//                }
-//
-//            }
-//        });
-//
-//
-//        fabStop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(fabStop.getVisibility() == View.VISIBLE){
-////                    fabStop.setVisibility(View.GONE);
-////                    fab.setVisibility(View.VISIBLE);
-//                    fab.setEnabled(true);
-//                }
-//            }
-//        });
     }
 
+    //recorder permission
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -236,17 +207,7 @@ public class Offline extends AppCompatActivity {
         mMediaRecorder.start();
     }
 
-    public void onToggleScreenShare(View view) {
-        if (((ToggleButton) view).isChecked()) {
-
-        } else {
-            mMediaRecorder.stop();
-            mMediaRecorder.reset();
-            Log.v(TAG, "Stopping Recording");
-            stopScreenSharing();
-        }
-    }
-
+    //start recording
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void shareScreen() {
         if (mMediaProjection == null) {
@@ -266,6 +227,7 @@ public class Offline extends AppCompatActivity {
                 /*Handler*/);
     }
 
+    //initialize recorder
     private void initRecorder() {
         try {
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -338,7 +300,7 @@ public class Offline extends AppCompatActivity {
             case REQUEST_PERMISSIONS: {
                 if ((grantResults.length > 0) && (grantResults[0] +
                         grantResults[1]) == PackageManager.PERMISSION_GRANTED) {
-                    onToggleScreenShare(mToggleButton);
+//                    onToggleScreenShare(mToggleButton);
                 } else {
                     mToggleButton.setChecked(false);
                     Snackbar.make(findViewById(android.R.id.content), "Permission",

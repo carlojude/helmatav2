@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //set window fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //get ip from user/edit ip
     public void getIp(){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
 
+        //set ip dialog
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,11 +127,14 @@ public class MainActivity extends AppCompatActivity
                 editor.putString("ip", ip_add.getText().toString());
                 editor.apply();
                 dialog.dismiss();
+            }
+        });
 
-
-//                Intent i = new Intent(MainActivity.this, Offline.class);
-//                i.putExtra("ip", ip_add.getText().toString());
-//                startActivity(i);
+        //close dialog
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
