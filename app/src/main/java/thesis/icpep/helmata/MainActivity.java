@@ -1,6 +1,7 @@
 package thesis.icpep.helmata;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -88,12 +89,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-
+            getIp();
         } else if (id == R.id.nav_online) {
 
         } else if (id == R.id.nav_offline) {
-            startActivity(new Intent(MainActivity.this,Online.class));
-
+            startActivity(new Intent(MainActivity.this,Offline.class));
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {
@@ -105,24 +105,35 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-//    public void getIp(){
-//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
-//        View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
-//
-//        final EditText ip_add = (EditText)findViewById(R.id.txtIp);
-//        Button confirm = (Button)findViewById(R.id.add);
-//        Button cancel = (Button)findViewById(R.id.cancel);
-//
-//        confirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(MainActivity.this, Online.class);
+    public void getIp(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
+
+        final EditText ip_add = (EditText)mview.findViewById(R.id.txtIp);
+        Button confirm = (Button)mview.findViewById(R.id.add);
+        Button cancel = (Button)mview.findViewById(R.id.cancel);
+
+        mBuilder.setView(mview);
+
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences("IPADD", MODE_PRIVATE).edit();
+                editor.putString("ip", ip_add.getText().toString());
+                editor.apply();
+                dialog.dismiss();
+
+
+//                Intent i = new Intent(MainActivity.this, Offline.class);
 //                i.putExtra("ip", ip_add.getText().toString());
-//            }
-//        });
-//
-//        mBuilder.setView(mview);
-//        AlertDialog dialog = mBuilder.create();
-//        dialog.show();
-//    }
+//                startActivity(i);
+            }
+        });
+
+
+
+    }
 }
