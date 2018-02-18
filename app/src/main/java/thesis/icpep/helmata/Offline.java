@@ -65,7 +65,6 @@ public class Offline extends AppCompatActivity {
     private String formattedTime;
     private String ip;
     private String curIp;
-    private String path;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -81,12 +80,6 @@ public class Offline extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
-
-        File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
-        if (!f.exists()) {
-            f.mkdirs();
-            path = f.getAbsolutePath();
-        }
 
         //get date and time
         Date c = Calendar.getInstance().getTime();

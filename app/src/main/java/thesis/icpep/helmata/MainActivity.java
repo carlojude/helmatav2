@@ -3,6 +3,7 @@ package thesis.icpep.helmata;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,10 +18,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity
-
-
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,16 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //set app directory
+        File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
+        if (!f.exists()) {
+            f.mkdirs();
+            path = f.getAbsolutePath();
+            SharedPreferences.Editor editor = getSharedPreferences("FilePath", MODE_PRIVATE).edit();
+            editor.putString("filePath", path);
+            editor.apply();
+        }
 
         //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {
-
+            startActivity(new Intent(MainActivity.this,Gallery.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

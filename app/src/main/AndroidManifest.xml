@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +30,13 @@
             android:name=".Offline"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".Online" />
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings" />
+        <activity
+            android:name=".Gallery"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity
+            android:name=".Player"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
