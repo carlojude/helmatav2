@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //set window fullscreen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             getIp();
         } else if (id == R.id.nav_online) {
-
+            startActivity(new Intent(MainActivity.this,Online.class));
         } else if (id == R.id.nav_offline) {
             startActivity(new Intent(MainActivity.this,Offline.class));
         } else if (id == R.id.nav_settings) {

@@ -1,5 +1,7 @@
 package thesis.icpep.helmata;
 
+import android.accessibilityservice.AccessibilityService;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -8,6 +10,7 @@ import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -73,11 +76,13 @@ public class Offline extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
 
@@ -188,6 +193,32 @@ public class Offline extends AppCompatActivity {
                 finalFab.setVisibility(View.VISIBLE);
             }
         });
+
+        //stop recording if screen is locked
+//        KeyguardManager myKM = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+//        if( myKM.inKeyguardRestrictedInputMode()) {
+//            mMediaRecorder.stop();
+//            mMediaRecorder.reset();
+//            Log.v(TAG, "Stopping Recording");
+//            stopScreenSharing();
+//            fabStop.setVisibility(View.GONE);
+//            finalFab.setVisibility(View.VISIBLE);
+//        } else {
+//            //it is not locked
+//        }
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isInteractive();
+        if(isScreenOn){
+
+        } else {
+            mMediaRecorder.stop();
+            mMediaRecorder.reset();
+            Log.v(TAG, "Stopping Recording");
+            stopScreenSharing();
+            fabStop.setVisibility(View.GONE);
+            finalFab.setVisibility(View.VISIBLE);
+        }
     }
 
     //recorder permission
