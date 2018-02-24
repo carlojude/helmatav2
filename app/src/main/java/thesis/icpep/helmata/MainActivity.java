@@ -1,9 +1,13 @@
 package thesis.icpep.helmata;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,16 +18,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String path;
+    ArrayList<String> list = new ArrayList<String>();
+    File[] listFile;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +47,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        GridView gridView = (GridView)findViewById(R.id.gridView);
+        gridView.setAdapter(new ImageAdapter(this));
+
         //set app directory
         File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
         if (!f.exists()) {
@@ -43,6 +59,17 @@ public class MainActivity extends AppCompatActivity
             editor.putString("filePath", path);
             editor.apply();
         }
+
+        //store path to array
+        if (f.isDirectory())
+        {
+            listFile = f.listFiles();
+            for (int i = 0; i < listFile.length; i++)
+            {
+                list.add(listFile[i].getAbsolutePath());
+            }
+        }
+
 
         //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +88,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -150,8 +179,49 @@ public class MainActivity extends AppCompatActivity
                 dialog.dismiss();
             }
         });
+    }
 
+    private class ImageAdapter extends BaseAdapter {
 
+        private Context mContext;
 
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public int getCount() {
+            return list.size();
+        }
+
+        public Object getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        // create a new ImageView for each item referenced by the Adapter
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView imageView;
+            if (convertView == null) {
+                // if it's not recycled, initialize some attributes
+                if(list.get(position).contains(".mp4"))
+                {
+////                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
+                    bitmap = ThumbnailUtils.createVideoThumbnail(list.get(position), 0); //Creation of Thumbnail of video
+                }
+                imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(8, 8, 8, 8);
+                imageView.setImageBitmap(bitmap);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+
+//            imageView.setImageResource(list[position]);
+            return imageView;
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
@@ -34,15 +35,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3Client;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -53,9 +45,6 @@ import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
 public class Online extends AppCompatActivity {
-
-    private final String KEY = "AKIAI5TFV64GANZGVVBQ";
-    private final String SECRET = "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";
 
     VideoView videoView;
     private static final String TAG = "MainActivity";
@@ -76,6 +65,7 @@ public class Online extends AppCompatActivity {
     private String ip;
     private String curIp;
     private String filename;
+    private File f;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -92,8 +82,6 @@ public class Online extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_online2);
-
-        AWSMobileClient.getInstance().initialize(this).execute();
 
         //get date and time
         Date c = Calendar.getInstance().getTime();
@@ -228,7 +216,7 @@ public class Online extends AppCompatActivity {
             finalFab.setVisibility(View.VISIBLE);
         }
 
-        }
+    }
 
     //recorder permission
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
