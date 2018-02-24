@@ -61,6 +61,13 @@ public class Gallery extends ListActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(Gallery.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public void getFiles(){
         File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
         if(!f.exists()){

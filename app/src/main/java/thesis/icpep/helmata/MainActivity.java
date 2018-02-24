@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,11 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> list = new ArrayList<String>();
     File[] listFile;
     Bitmap bitmap;
+    public  final int PLAY_VIDEO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,28 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        GridView grid = (GridView)findViewById(R.id.gridView);
+
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                Uri data = Uri.parse(list.get(position));
+//                intent.setDataAndType(data,"video/*");
+//                if (intent.resolveActivity(getPackageManager()) != null) {
+//                    startActivity(intent);
+//                }
+//                startActivityForResult(Intent.createChooser(intent,
+//
+//                        "Play Video"), PLAY_VIDEO);
+
+                String item = list.get(position);
+                Intent i = new Intent(MainActivity.this, Player.class);
+                i.putExtra("video", item);
+                startActivity(i);
+                Toast.makeText(MainActivity.this, list.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -135,11 +162,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_online) {
             startActivity(new Intent(MainActivity.this,Online.class));
         } else if (id == R.id.nav_offline) {
+            finish();
             startActivity(new Intent(MainActivity.this,Offline.class));
         } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(MainActivity.this,Gallery.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

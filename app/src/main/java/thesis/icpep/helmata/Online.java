@@ -35,6 +35,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -67,6 +78,10 @@ public class Online extends AppCompatActivity {
     private String filename;
     private File f;
 
+    CognitoCachingCredentialsProvider credentialsProvider;
+    String bucket = "helmata";
+    File theFile;
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -92,6 +107,19 @@ public class Online extends AppCompatActivity {
 
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
         formattedTime = tf.format(c);
+
+        //amazon
+        AWSMobileClient.getInstance().initialize(this).execute();
+
+        credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:f56a94ef-db6a-4c04-89d2-ec75a9ccb023", // Identity pool ID
+                Regions.US_EAST_1); // Region
+
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                getApplicationContext(),
+                Regions.US_EAST_1, // Region
+                credentialsProvider);
 
         //pass data from mainactivity
         SharedPreferences prefs = getSharedPreferences("IPADD", MODE_PRIVATE);
@@ -187,6 +215,14 @@ public class Online extends AppCompatActivity {
                 stopScreenSharing();
                 fabStop.setVisibility(View.GONE);
                 finalFab.setVisibility(View.VISIBLE);
+
+                theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
+                if(theFile.exists()){
+                    upload();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No such file!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -357,6 +393,45 @@ public class Online extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    public void upload() {
+        AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
+        TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
+
+        theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
+        String path = theFile.getPath();
+
+        final TransferObserver observer = transferUtility.upload(
+                "helmata",  //this is the bucket name on S3
+                "Helmata/" + filename, //this is the path and name
+                theFile //path to the file locally
+//                CannedAccessControlList.PublicRead //to make the file public
+        );
+
+        observer.setTransferListener(new TransferListener() {
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                if (state.equals(TransferState.COMPLETED)) {
+                    Toast.makeText(getApplicationContext(), "State Change"
+                            + state, Toast.LENGTH_SHORT).show();
+                } else if (state.equals(TransferState.FAILED)) {
+                    Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+
+            }
+        });
+
     }
 }
 
