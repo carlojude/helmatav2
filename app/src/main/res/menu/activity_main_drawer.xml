@@ -22,13 +22,13 @@
             android:title="Settings" />
     </group>
 
-    <!--<item android:title="Gallery">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_gallery"-->
-                <!--android:icon="@drawable/ic_menu_gallery"-->
-                <!--android:title="Gallery" />-->
-        <!--</menu>-->
-    <!--</item>-->
+    <item android:title="Online Gallery">
+        <menu>
+            <item
+                android:id="@+id/nav_gallery"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Online Gallery" />
+        </menu>
+    </item>
 
 </menu>

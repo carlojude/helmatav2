@@ -41,7 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="11dp"
-        android:backgroundTint="@color/green"
+        app:backgroundTint="#10ba68"
         app:fabSize="mini"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
@@ -58,7 +58,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/red"
+            app:backgroundTint="#d12710"
             app:fabSize="mini"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
     </RelativeLayout>

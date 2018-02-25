@@ -1,8 +1,12 @@
 package thesis.icpep.helmata;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -10,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,11 +33,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +50,12 @@ public class MainActivity extends AppCompatActivity
     File[] listFile;
     Bitmap bitmap;
     public  final int PLAY_VIDEO = 1;
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 //                Intent intent = new Intent(Intent.ACTION_VIEW);
 //                Uri data = Uri.parse(list.get(position));
 //                intent.setDataAndType(data,"video/*");
@@ -109,14 +123,62 @@ public class MainActivity extends AppCompatActivity
 //
 //                        "Play Video"), PLAY_VIDEO);
 
-                String item = list.get(position);
-                Intent i = new Intent(MainActivity.this, Player.class);
-                i.putExtra("video", item);
-                startActivity(i);
-                Toast.makeText(MainActivity.this, list.get(position), Toast.LENGTH_SHORT).show();
+                final String item = list.get(position);
+
+//                Toast.makeText(MainActivity.this, list.get(position), Toast.LENGTH_SHORT).show();
+                final File getFileName = new File(Environment.getExternalStorageDirectory(), "Helmata/" + item);
+                final String path = getFileName.getPath();
+                String filename= path.substring(path.lastIndexOf("/")+1);
+
+                final File theFilePath = new File(Environment.getExternalStorageDirectory(), "Helmata");
+                final File theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(filename);
+//                builder.setSingleChoiceItems(items, -1,
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int item) {
+//                                Toast.makeText(getApplicationContext(), items[item],
+//                                        Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+
+                builder.setPositiveButton("Play", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent;
+
+                        verifyStoragePermissions(MainActivity.this);
+                        File f = new File(Environment.getExternalStorageDirectory(), "Helmata/");
+                        Uri uri = Uri.parse(item);
+
+                        intent = new Intent(MainActivity.this, Player.class);
+                        intent.putExtra(Player.VIDEO_TYPE, Player.SIMPLE_VIDEO);
+                        intent.putExtra(Player.VIDEO_URI, "file:///" + uri);
+                        startActivity(intent);
+//                        Intent i = new Intent(MainActivity.this, Player.class);
+//                        i.putExtra("video", item);
+//                        startActivity(i);
+                    }
+                });
+
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(theFilePath.exists()){
+                            theFile.delete();
+                            finish();
+                            startActivity(new Intent(MainActivity.this,MainActivity.class));
+                            Toasty.success(MainActivity.this, "Successfully Deleted", Toast.LENGTH_LONG).show();
+                        } else {
+                            String filename= path.substring(path.lastIndexOf("/")+1);
+                            Toasty.error(MainActivity.this, "File does not exist", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                android.app.AlertDialog alert = builder.create();
+                alert.show();
             }
         });
-
     }
 
     @Override
@@ -158,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            getIp();
+            ip();
         } else if (id == R.id.nav_online) {
             startActivity(new Intent(MainActivity.this,Online.class));
         } else if (id == R.id.nav_offline) {
@@ -166,6 +228,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this,Offline.class));
         } else if (id == R.id.nav_settings) {
 
+        } else if (id == R.id.nav_gallery) {
+            startActivity(new Intent(MainActivity.this,Gallery.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -173,7 +237,32 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //get ip from user/edit ip
+    public void ip(){
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Manage IP");
+        builder.setMessage("Enter IP Camera's IP Address");
+
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input); // uncomment this line
+
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences.Editor editor = getSharedPreferences("IPADD", MODE_PRIVATE).edit();
+                editor.putString("ip", input.getText().toString());
+                editor.apply();
+                Toasty.success(MainActivity.this, input.getText().toString(), Toast.LENGTH_SHORT);
+            }
+        });
+
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    //get ip from user or edit ip
     public void getIp(){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
@@ -234,8 +323,8 @@ public class MainActivity extends AppCompatActivity
                 // if it's not recycled, initialize some attributes
                 if(list.get(position).contains(".mp4"))
                 {
-////                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
-                    bitmap = ThumbnailUtils.createVideoThumbnail(list.get(position), 0); //Creation of Thumbnail of video
+                    //create thumbnail of video
+                    bitmap = ThumbnailUtils.createVideoThumbnail(list.get(position), 0);
                 }
                 imageView = new ImageView(mContext);
                 imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
@@ -245,9 +334,21 @@ public class MainActivity extends AppCompatActivity
             } else {
                 imageView = (ImageView) convertView;
             }
-
-//            imageView.setImageResource(list[position]);
             return imageView;
+        }
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
         }
     }
 }

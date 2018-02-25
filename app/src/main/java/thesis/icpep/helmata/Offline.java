@@ -358,7 +358,14 @@ public class Offline extends AppCompatActivity {
         }
     }
 
-//    if(getResources().getDisplayMetrics().widthPixels>getResources().getDisplayMetrics().
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Offline.this,MainActivity.class));
+        finish();
+    }
+
+    //    if(getResources().getDisplayMetrics().widthPixels>getResources().getDisplayMetrics().
 //    heightPixels)
 //    {
 //        Toast.makeText(this,"Screen switched to Landscape mode",Toast.LENGTH_SHORT).show();

@@ -52,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
@@ -395,12 +396,17 @@ public class Online extends AppCompatActivity {
         }
     }
 
+    //upload video to amazon s3 bucket
     public void upload() {
         AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
         TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
 
         theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
         String path = theFile.getPath();
+
+        SharedPreferences.Editor editor = getSharedPreferences("filename", MODE_PRIVATE).edit();
+        editor.putString("filename", filename);
+        editor.apply();
 
         final TransferObserver observer = transferUtility.upload(
                 "helmata",  //this is the bucket name on S3
@@ -413,17 +419,19 @@ public class Online extends AppCompatActivity {
             @Override
             public void onStateChanged(int id, TransferState state) {
                 if (state.equals(TransferState.COMPLETED)) {
-                    Toast.makeText(getApplicationContext(), "State Change"
-                            + state, Toast.LENGTH_SHORT).show();
+                    Toasty.success(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
                 } else if (state.equals(TransferState.FAILED)) {
-                    Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(), "Unable to Upload Video", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
             public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                float percentDonef = ((float)bytesCurrent/(float)bytesTotal) * 100;
+                int percentDone = (int)percentDonef;
 
+                Toasty.info(getApplicationContext(), percentDone + "% Uploaded",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
