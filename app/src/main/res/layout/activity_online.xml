@@ -17,7 +17,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:foregroundGravity="center"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:rotation="90">
 
     </io.vov.vitamio.widget.VideoView>
 
@@ -60,7 +61,7 @@
             android:layout_marginBottom="12dp"
             app:backgroundTint="#d12710"
             app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+            app:srcCompat="@android:drawable/ic_menu_camera" />
     </RelativeLayout>
 
 </RelativeLayout>

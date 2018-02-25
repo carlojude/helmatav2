@@ -5,6 +5,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.SparseIntArray;
+import android.view.Display;
 import android.view.Surface;
 import android.view.View;
 import android.view.Window;
@@ -255,11 +257,30 @@ public class Offline extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private VirtualDisplay createVirtualDisplay() {
-        return mMediaProjection.createVirtualDisplay("MainActivity",
-                DISPLAY_WIDTH, DISPLAY_HEIGHT, mScreenDensity,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                mMediaRecorder.getSurface(), null /*Callbacks*/, null
+        Display screenOrientation = getWindowManager().getDefaultDisplay();
+        int orientation = Configuration.ORIENTATION_UNDEFINED;
+
+        if(screenOrientation.getWidth() < screenOrientation.getHeight()){
+            return mMediaProjection.createVirtualDisplay("MainActivity",
+                    DISPLAY_WIDTH, DISPLAY_HEIGHT, mScreenDensity,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                    mMediaRecorder.getSurface(), null /*Callbacks*/, null
                 /*Handler*/);
+
+        }else {
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            int screenWidth = 1280;
+            int screenHeight = 720;
+            int screenDensity = metrics.densityDpi;
+
+            return mMediaProjection.createVirtualDisplay("MainActivity",
+                    screenWidth, screenHeight, screenDensity,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                    mMediaRecorder.getSurface(), null /*Callbacks*/, null
+                /*Handler*/);
+
+        }
+
     }
 
     //initialize recorder

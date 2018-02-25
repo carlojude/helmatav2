@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -34,6 +35,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         //set window fullscreen
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -230,6 +233,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(MainActivity.this,Gallery.class));
+        } else if (id == R.id.name) {
+            user();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -262,39 +267,70 @@ public class MainActivity extends AppCompatActivity
         alert.show();
     }
 
-    //get ip from user or edit ip
-    public void getIp(){
+    public void user(){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
-
-        final EditText ip_add = (EditText)mview.findViewById(R.id.txtIp);
-        Button confirm = (Button)mview.findViewById(R.id.add);
-        Button cancel = (Button)mview.findViewById(R.id.cancel);
-
         mBuilder.setView(mview);
 
+        final EditText user = (EditText) mview.findViewById(R.id.user);
+
         final AlertDialog dialog = mBuilder.create();
+
         dialog.show();
 
-        //set ip dialog
-        confirm.setOnClickListener(new View.OnClickListener() {
+        final Button edit = (Button)mview.findViewById(R.id.edit);
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = getSharedPreferences("IPADD", MODE_PRIVATE).edit();
-                editor.putString("ip", ip_add.getText().toString());
-                editor.apply();
+                user.setText("Jude");
+                SharedPreferences.Editor editorUser = getSharedPreferences("user", MODE_PRIVATE).edit();
+                editorUser.putString("user", user.getText().toString());
+                editorUser.apply();
+                user.setEnabled(false);
+                edit.setEnabled(false);
                 dialog.dismiss();
             }
         });
 
-        //close dialog
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+
+
+
+
     }
+
+    //get ip from user or edit ip
+//    public void getIp(){
+//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+//        View mview = getLayoutInflater().inflate(R.layout.add_ip, null);
+//
+//        final EditText ip_add = (EditText)mview.findViewById(R.id.txtIp);
+//        Button confirm = (Button)mview.findViewById(R.id.add);
+//        Button cancel = (Button)mview.findViewById(R.id.cancel);
+//
+//        mBuilder.setView(mview);
+//
+//        final AlertDialog dialog = mBuilder.create();
+//        dialog.show();
+//
+//        //set ip dialog
+//        confirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SharedPreferences.Editor editor = getSharedPreferences("IPADD", MODE_PRIVATE).edit();
+//                editor.putString("ip", ip_add.getText().toString());
+//                editor.apply();
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        //close dialog
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//    }
 
     private class ImageAdapter extends BaseAdapter {
 

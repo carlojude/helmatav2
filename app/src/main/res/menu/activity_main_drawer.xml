@@ -31,4 +31,13 @@
         </menu>
     </item>
 
+    <item android:title="User">
+        <menu>
+            <item
+                android:id="@+id/name"
+                android:icon="@drawable/ic_launcher"
+                android:title="User" />
+        </menu>
+    </item>
+
 </menu>

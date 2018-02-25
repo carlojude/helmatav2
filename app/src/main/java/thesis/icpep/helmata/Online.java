@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
@@ -78,6 +79,7 @@ public class Online extends AppCompatActivity {
     private String curIp;
     private String filename;
     private File f;
+    private String username;
 
     CognitoCachingCredentialsProvider credentialsProvider;
     String bucket = "helmata";
@@ -96,8 +98,12 @@ public class Online extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_online2);
+
+        SharedPreferences userPrefs = getSharedPreferences("user", MODE_PRIVATE);
+        username = userPrefs.getString("user", null);
 
         //get date and time
         Date c = Calendar.getInstance().getTime();
@@ -410,7 +416,7 @@ public class Online extends AppCompatActivity {
 
         final TransferObserver observer = transferUtility.upload(
                 "helmata",  //this is the bucket name on S3
-                "Helmata/" + filename, //this is the path and name
+                username + "/" + filename, //this is the path and name
                 theFile //path to the file locally
 //                CannedAccessControlList.PublicRead //to make the file public
         );
