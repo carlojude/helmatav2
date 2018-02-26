@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context="thesis.icpep.helmata.Offline"
     android:background="@color/colorAccent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
 
     <io.vov.vitamio.widget.VideoView

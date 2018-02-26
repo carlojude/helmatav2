@@ -426,6 +426,7 @@ public class Online extends AppCompatActivity {
             public void onStateChanged(int id, TransferState state) {
                 if (state.equals(TransferState.COMPLETED)) {
                     Toasty.success(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
+                    deleteFile();
                 } else if (state.equals(TransferState.FAILED)) {
                     Toasty.error(getApplicationContext(), "Unable to Upload Video", Toast.LENGTH_SHORT).show();
                 }
@@ -446,6 +447,14 @@ public class Online extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void deleteFile(){
+        final File theFilePath = new File(Environment.getExternalStorageDirectory(), "Helmata");
+
+        if(theFilePath.exists()){
+            theFile.delete();
+        }
     }
 }
 

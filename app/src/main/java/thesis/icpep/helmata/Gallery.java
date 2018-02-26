@@ -60,6 +60,8 @@ public class Gallery extends ListActivity {
     private File theFile;
     private String username;
     List<String> listing;
+    private List<String> listValues;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,8 @@ public class Gallery extends ListActivity {
                         MY_PERMISSION_REQUEST);
             }
         } else {
-            fetchFileFromS3();
+            getFiles1();
+//            fetchFileFromS3();
         }
 
         listView = getListView();
@@ -151,8 +154,16 @@ public class Gallery extends ListActivity {
 
                     for (int i=0; i< listing.size(); i++){
                         Toast.makeText(Gallery.this, listing.get(i),Toast.LENGTH_LONG).show();
+                        listValues = new ArrayList<String>();
+
+                        listValues.add(listing.get(i));
+                        Toast.makeText(Gallery.this, listValues.get(i),Toast.LENGTH_LONG).show();
                     }
                     Looper.loop();
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(Gallery.this, android.R.layout.simple_list_item_1,
+                            listValues);
+                    setListAdapter(adapter);
+
                     // Log.e("tag", "listing "+ listing);
                 }
                 catch (Exception e) {
@@ -181,6 +192,24 @@ public class Gallery extends ListActivity {
         }
         return objectNames;
     }
+
+    public void getFiles1(){
+                File f = new File(Environment.getExternalStorageDirectory(), "Helmata");
+                if(!f.exists()){
+
+                            } else {
+                        File[] vid = f.listFiles();
+                        arrayList = new ArrayList<>();
+
+                                for (int i = 0; i < vid.length; i++)
+                            {
+                                        arrayList.add(vid[i].getName());
+                            mAdapter = new ArrayAdapter<String>(this,
+                                            android.R.layout.simple_list_item_1, arrayList);
+                            getListView().setAdapter(mAdapter);
+                       }
+                    }
+            }
 
     public void files(){
         AmazonS3 s3 = new AmazonS3Client(credentialsProvider);

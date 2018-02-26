@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.SparseIntArray;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.Window;
@@ -178,7 +179,7 @@ public class Offline extends AppCompatActivity {
                     initRecorder();
                     shareScreen();
                     finalFab.setVisibility(View.GONE);
-                    fabStop.setVisibility(View.VISIBLE);
+//                    fabStop.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -193,6 +194,22 @@ public class Offline extends AppCompatActivity {
                 stopScreenSharing();
                 fabStop.setVisibility(View.GONE);
                 finalFab.setVisibility(View.VISIBLE);
+            }
+        });
+
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab);
+                FloatingActionButton fabStop1 = (FloatingActionButton) findViewById(R.id.fabStop);
+
+                if(fabStop1.getVisibility() == View.VISIBLE && fab1.getVisibility() == View.GONE){
+                    fabStop1.setVisibility(View.GONE);
+                } else if(fab1.getVisibility() == View.GONE && fab1.getVisibility() == View.GONE){
+                    fabStop1.setVisibility(View.VISIBLE);
+                }
+
+                return false;
             }
         });
 

@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -225,7 +226,20 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             ip();
         } else if (id == R.id.nav_online) {
-            startActivity(new Intent(MainActivity.this,Online.class));
+            //check if connected to internet
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            android.net.NetworkInfo wifi = cm
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo datac = cm
+                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if ((wifi != null & datac != null)
+                    && (wifi.isConnected() | datac.isConnected())) {
+                //go to activity
+                startActivity(new Intent(MainActivity.this,Online.class));
+            }else{
+                //no connection
+                Toasty.error(MainActivity.this, "Internet Connection is Required.", Toast.LENGTH_LONG).show();
+            }
         } else if (id == R.id.nav_offline) {
             finish();
             startActivity(new Intent(MainActivity.this,Offline.class));
