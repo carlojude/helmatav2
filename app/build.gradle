@@ -33,7 +33,7 @@ dependencies {
     compile project(':vitamio')
     compile 'com.amazonaws:aws-android-sdk-s3:2.6.+'
     compile 'com.amazonaws:aws-android-sdk-cognito:2.6.+'
-    compile ('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true; }
+    compile('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true; }
     compile 'com.github.GrenderG:Toasty:1.2.8'
 
     compile 'com.google.android.exoplayer:exoplayer-core:r2.4.1'

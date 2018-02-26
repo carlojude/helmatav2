@@ -88,10 +88,14 @@ public class MainActivity extends AppCompatActivity
         //store path to array
         if (f.isDirectory())
         {
-            listFile = f.listFiles();
-            for (int i = 0; i < listFile.length; i++)
-            {
-                list.add(listFile[i].getAbsolutePath());
+            if(f.list().length < 1){
+                Toasty.info(MainActivity.this, "Gallery is Empty", Toast.LENGTH_SHORT);
+            } else {
+                listFile = f.listFiles();
+                for (int i = 0; i < listFile.length; i++)
+                {
+                    list.add(listFile[i].getAbsolutePath());
+                }
             }
         }
 
@@ -249,8 +253,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(MainActivity.this,Gallery.class));
-        } else if (id == R.id.name) {
-            user();
+        } else if (id == R.id.username) {
+            startActivity(new Intent(MainActivity.this,User.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -298,7 +302,6 @@ public class MainActivity extends AppCompatActivity
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setText("Jude");
                 SharedPreferences.Editor editorUser = getSharedPreferences("user", MODE_PRIVATE).edit();
                 editorUser.putString("user", user.getText().toString());
                 editorUser.apply();
