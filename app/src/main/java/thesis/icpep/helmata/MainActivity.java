@@ -42,6 +42,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import es.dmoral.toasty.Toasty;
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         GridView gridView = (GridView)findViewById(R.id.gridView);
+        Collections.sort(list);
         gridView.setAdapter(new ImageAdapter(this));
 
         //set app directory
