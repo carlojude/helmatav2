@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,10 +43,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
@@ -56,6 +71,11 @@ public class MainActivity extends AppCompatActivity
     File[] listFile;
     Bitmap bitmap;
     public  final int PLAY_VIDEO = 1;
+    ArrayList<String> arrayList;
+
+    CognitoCachingCredentialsProvider credentialsProvider;
+    private List<String> listValues;
+    List<String> listing;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -73,6 +93,21 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        AWSMobileClient.getInstance().initialize(this).execute();
+
+        credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:f56a94ef-db6a-4c04-89d2-ec75a9ccb023", // Identity pool ID
+                Regions.US_EAST_1); // Region
+
+        CognitoSyncManager syncClient = new CognitoSyncManager(
+                getApplicationContext(),
+                Regions.US_EAST_1, // Region
+                credentialsProvider);
+
+        fetchFileFromS3();
+
 
         GridView gridView = (GridView)findViewById(R.id.gridView);
         Collections.sort(list);
@@ -166,6 +201,7 @@ public class MainActivity extends AppCompatActivity
 
                 final File theFilePath = new File(Environment.getExternalStorageDirectory(), "Helmata");
                 final File theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
+
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(filename);
@@ -273,11 +309,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_offline) {
             finish();
             startActivity(new Intent(MainActivity.this,Offline.class));
-//            startActivity(new Intent(MainActivity.this,OfflineStream.class));
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(MainActivity.this,Gallery.class));
+            Intent i = new Intent(this,Gallery.class);
+            i.putExtra("mylist", arrayList);
+            startActivity(i);
+
+//            startActivity(new Intent(MainActivity.this,Gallery.class));
         } else if (id == R.id.username) {
             startActivity(new Intent(MainActivity.this,User.class));
         }
@@ -430,5 +469,74 @@ public class MainActivity extends AppCompatActivity
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public void fetchFileFromS3(){
+
+        // Get List of files from S3 Bucket
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
+                try {
+                    Looper.prepare();
+                    listing = getObjectslistFromFolder("helmata", "Jude");
+                    Looper.loop();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("tag", "Exception found while listing "+ e);
+                }
+
+            }
+        });
+        thread.start();
+    }
+
+    public List<String> getObjectslistFromFolder(String bucketName, String folderKey) {
+
+        AmazonS3 s3Client = new AmazonS3Client(credentialsProvider);
+
+        ListObjectsRequest listObjectsRequest =
+                new ListObjectsRequest()
+                        .withBucketName(bucketName)
+                        .withPrefix(folderKey + "/");
+
+        List<String> keys = new ArrayList<>();
+
+        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
+        for (;;) {
+            List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+
+            if (summaries.size() < 1) {
+                break;
+            }
+            arrayList = new ArrayList<>();
+            for(int x = 0; x < summaries.size(); x++){
+                arrayList.add(x, summaries.get(x).getKey());
+            }
+//            int z = 0;
+//            while (z <  summaries.size()){
+//                arrayList = new ArrayList<>();
+//                arrayList.add(, summaries.get(x).getKey());
+//            }
+
+//            for (S3ObjectSummary objectSummary :
+//                    objects.getObjectSummaries()) {
+//                System.out.println( " - " + objectSummary.getKey() + "  " +
+//                        "(size = " + objectSummary.getSize() +
+//                        ")");
+////                String filename=listing.get(i).substring(listing.lastIndexOf("/")+1);
+//
+////                Toast.makeText(Gallery.this, objectSummary.getKey(),Toast.LENGTH_LONG).show();
+//
+//
+//
+//
+////                Toast.makeText(MainActivity.this, objectSummary.getKey(),Toast.LENGTH_LONG).show();
+//            }
+            objects = s3Client.listNextBatchOfObjects(objects);
+        }
+        return keys;
     }
 }

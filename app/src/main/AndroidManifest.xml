@@ -60,8 +60,6 @@
         <activity
             android:name=".User"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".OfflineStream"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

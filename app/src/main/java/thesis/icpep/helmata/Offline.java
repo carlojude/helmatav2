@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
+import es.dmoral.toasty.Toasty;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 import android.Manifest;
@@ -89,6 +90,15 @@ public class Offline extends AppCompatActivity {
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
 
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)videoView.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            videoView.setLayoutParams(params); //causes layout update
+        } else {
+            //code for portrait mode
+        }
+
         //get date and time
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
@@ -119,8 +129,8 @@ public class Offline extends AppCompatActivity {
         videoView.setMediaController(mc);
 
         //Set the path of Video or URI rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov
-        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
-//        videoView.setVideoURI(Uri.parse("rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"));
+//        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
+        videoView.setVideoURI(Uri.parse("rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"));
 
         //Set the focus
         videoView.requestFocus();
@@ -195,6 +205,7 @@ public class Offline extends AppCompatActivity {
                 stopScreenSharing();
                 fabStop.setVisibility(View.GONE);
                 finalFab.setVisibility(View.VISIBLE);
+                Toasty.success(Offline.this, "Video has been saved.", Toast.LENGTH_LONG).show();
             }
         });
 
