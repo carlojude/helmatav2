@@ -86,7 +86,7 @@ public class Offline extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
 
         //get date and time
@@ -112,7 +112,7 @@ public class Offline extends AppCompatActivity {
         int width = getResources().getDisplayMetrics().widthPixels;
         int hei=getResources().getDisplayMetrics().heightPixels;
 
-        videoView.setLayoutParams(new RelativeLayout.LayoutParams(width, hei));
+//        videoView.setLayoutParams(new RelativeLayout.LayoutParams(width, hei));
 
         //add controls to a MediaPlayer like play, pause.
         MediaController mc = new MediaController(this);

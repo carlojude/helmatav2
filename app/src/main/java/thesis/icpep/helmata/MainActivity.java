@@ -272,8 +272,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_offline) {
             finish();
-//            startActivity(new Intent(MainActivity.this,Offline.class));
-            startActivity(new Intent(MainActivity.this,OfflineStream.class));
+            startActivity(new Intent(MainActivity.this,Offline.class));
+//            startActivity(new Intent(MainActivity.this,OfflineStream.class));
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {
