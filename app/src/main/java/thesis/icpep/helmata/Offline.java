@@ -24,6 +24,7 @@ import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
@@ -87,10 +88,41 @@ public class Offline extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_online);
+
+        final int orientation = this.getResources().getConfiguration().orientation;
+
+        final Button orientationBtn = (Button)findViewById(R.id.fabOrientation);
+        final Button portrait = (Button)findViewById(R.id.fabOrientation2) ;
+        portrait.setVisibility(View.GONE);
+
+        orientationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (orientation == Configuration.ORIENTATION_PORTRAIT){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+                }
+                orientationBtn.setVisibility(View.GONE);
+                portrait.setVisibility(View.VISIBLE);
+            }
+        });
+
+        portrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                }
+                portrait.setVisibility(View.GONE);
+                orientationBtn.setVisibility(View.VISIBLE);
+            }
+        });
 //
-//        int orientation = this.getResources().getConfiguration().orientation;
+
 //        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 //            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)videoView.getLayoutParams();
 //            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);

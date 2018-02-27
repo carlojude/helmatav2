@@ -343,7 +343,6 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences.Editor editor = getSharedPreferences("IPADD", MODE_PRIVATE).edit();
                 editor.putString("ip", input.getText().toString());
                 editor.apply();
-                Toasty.success(MainActivity.this, input.getText().toString(), Toast.LENGTH_SHORT);
             }
         });
 
