@@ -89,15 +89,15 @@ public class Offline extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_online);
-
-        int orientation = this.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)videoView.getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            videoView.setLayoutParams(params); //causes layout update
-        } else {
-            //code for portrait mode
-        }
+//
+//        int orientation = this.getResources().getConfiguration().orientation;
+//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)videoView.getLayoutParams();
+//            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//            videoView.setLayoutParams(params); //causes layout update
+//        } else {
+//            //code for portrait mode
+//        }
 
         //get date and time
         Date c = Calendar.getInstance().getTime();
@@ -129,8 +129,8 @@ public class Offline extends AppCompatActivity {
         videoView.setMediaController(mc);
 
         //Set the path of Video or URI rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov
-//        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
-        videoView.setVideoURI(Uri.parse("rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"));
+        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
+//        videoView.setVideoURI(Uri.parse("rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"));
 
         //Set the focus
         videoView.requestFocus();
