@@ -57,8 +57,10 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
-        <activity android:name=".User"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
+            android:name=".User"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".OfflineStream"></activity>
     </application>
 
 </manifest>

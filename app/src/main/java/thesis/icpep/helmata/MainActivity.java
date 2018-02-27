@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private static final int REQUEST_PERMISSIONS = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +88,32 @@ public class MainActivity extends AppCompatActivity
             editor.apply();
         }
 
-        //store path to array
-        if (f.isDirectory())
-        {
-            if(f.list().length < 1){
-                Toasty.info(MainActivity.this, "Gallery is Empty", Toast.LENGTH_SHORT);
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Snackbar.make(findViewById(android.R.id.content), "Permission",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission
+                                                .READ_EXTERNAL_STORAGE},
+                                        REQUEST_PERMISSIONS);
+                            }
+                        }).show();
             } else {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission
+                                .READ_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+            }
+        } else {
+            //store path to array
+            if (f.isDirectory())
+            {
                 listFile = f.listFiles();
                 for (int i = 0; i < listFile.length; i++)
                 {
@@ -98,6 +121,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+
 
 
         //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -248,7 +272,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_offline) {
             finish();
-            startActivity(new Intent(MainActivity.this,Offline.class));
+//            startActivity(new Intent(MainActivity.this,Offline.class));
+            startActivity(new Intent(MainActivity.this,OfflineStream.class));
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {

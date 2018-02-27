@@ -148,7 +148,7 @@ public class Online extends AppCompatActivity {
         videoView.setMediaController(mc);
 
         //Set the path of Video or URI
-        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/unicast"));
+        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
 
         //Set the focus
         videoView.requestFocus();

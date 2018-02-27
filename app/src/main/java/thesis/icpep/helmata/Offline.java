@@ -118,8 +118,9 @@ public class Offline extends AppCompatActivity {
         MediaController mc = new MediaController(this);
         videoView.setMediaController(mc);
 
-        //Set the path of Video or URI
-        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + ".h264"));
+        //Set the path of Video or URI rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov
+//        videoView.setVideoURI(Uri.parse("rtsp://" + curIp + "/ch0_1.h264"));
+        videoView.setVideoURI(Uri.parse("rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"));
 
         //Set the focus
         videoView.requestFocus();
