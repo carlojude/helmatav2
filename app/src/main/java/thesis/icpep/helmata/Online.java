@@ -238,7 +238,6 @@ public class Online extends AppCompatActivity {
                                 REQUEST_PERMISSIONS);
                     }
                 } else {
-                    Toasty.info(Online.this, "Recording..", 300).show();
                     initRecorder();
                     shareScreen();
                     finalFab.setVisibility(View.GONE);
@@ -269,6 +268,7 @@ public class Online extends AppCompatActivity {
 
                 theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
                 if(theFile.exists()){
+                    Toasty.info(Online.this, "Uploading..", 300).show();
                     upload();
                 } else {
                     Toast.makeText(getApplicationContext(), "No such file!", Toast.LENGTH_SHORT).show();

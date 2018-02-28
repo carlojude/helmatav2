@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity
 //                        "Play Video"), PLAY_VIDEO);
 
                 final String item = list.get(position);
+//                Toasty.success(MainActivity.this, item, Toast.LENGTH_LONG).show();
 
 //                Toast.makeText(MainActivity.this, list.get(position), Toast.LENGTH_SHORT).show();
                 final File getFileName = new File(Environment.getExternalStorageDirectory(), "Helmata/" + item);
@@ -310,6 +311,7 @@ public class MainActivity extends AppCompatActivity
             if ((wifi != null & datac != null)
                     && (wifi.isConnected() | datac.isConnected())) {
                 //go to activity
+                finish();
                 startActivity(new Intent(MainActivity.this,Online.class));
             }else{
                 //no connection
@@ -321,11 +323,29 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_gallery) {
+
             Intent i = new Intent(this,Gallery.class);
             i.putExtra("mylist", arrayList);
             startActivity(i);
+            finish();
 
-//            startActivity(new Intent(MainActivity.this,Gallery.class));
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            android.net.NetworkInfo wifi = cm
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo datac = cm
+                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+//            if ((wifi != null & datac != null)
+//                    && (wifi.isConnected() | datac.isConnected())) {
+//                //go to activity
+//                Intent i = new Intent(this,Gallery.class);
+//                i.putExtra("mylist", arrayList);
+//                startActivity(i);
+//                finish();
+//            }else{
+//                //no connection
+//                Toasty.error(MainActivity.this, "Internet Connection is Required.", Toast.LENGTH_LONG).show();
+//            }
         } else if (id == R.id.username) {
             startActivity(new Intent(MainActivity.this,User.class));
         }
