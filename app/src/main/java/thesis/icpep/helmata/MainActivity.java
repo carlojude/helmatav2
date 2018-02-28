@@ -485,7 +485,7 @@ public class MainActivity extends AppCompatActivity
                     bitmap = ThumbnailUtils.createVideoThumbnail(list.get(position), 0);
                 }
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
+                imageView.setLayoutParams(new GridView.LayoutParams(getResources().getDisplayMetrics().widthPixels/3, getResources().getDisplayMetrics().widthPixels/3));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(8, 8, 8, 8);
                 imageView.setImageBitmap(bitmap);
