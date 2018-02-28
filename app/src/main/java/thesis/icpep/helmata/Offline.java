@@ -361,13 +361,14 @@ public class Offline extends AppCompatActivity {
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mMediaRecorder.setOutputFile(Environment
                     .getExternalStoragePublicDirectory("Helmata") + "/" + formattedDate + "_" + formattedTime + ".mp4");
-            mMediaRecorder.setVideoSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+            mMediaRecorder.setVideoSize(getResources().getDisplayMetrics().widthPixels,
+                    getResources().getDisplayMetrics().heightPixels);
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mMediaRecorder.setVideoEncodingBitRate(720 * 1280);
             mMediaRecorder.setVideoFrameRate(30);
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            int orientation = ORIENTATIONS.get(rotation + 90);
+            int orientation = ORIENTATIONS.get(180);
             mMediaRecorder.setOrientationHint(orientation);
             mMediaRecorder.prepare();
         } catch (IOException e) {
