@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     Bitmap bitmap;
     public  final int PLAY_VIDEO = 1;
     ArrayList<String> arrayList;
+    private String getUsername;
 
     CognitoCachingCredentialsProvider credentialsProvider;
     private List<String> listValues;
@@ -107,7 +108,15 @@ public class MainActivity extends AppCompatActivity
                 Regions.US_EAST_1, // Region
                 credentialsProvider);
 
-        fetchFileFromS3();
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+        getUsername = prefs.getString("user", null);
+
+        if(getUsername == null || getUsername == ""){
+            Toasty.info(MainActivity.this, "Update Your Name in User Setting", Toast.LENGTH_SHORT).show();
+        } else {
+            fetchFileFromS3();
+        }
+
 
 
         GridView gridView = (GridView)findViewById(R.id.gridView);
@@ -287,7 +296,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            finish();
+            startActivity(new Intent(MainActivity.this,MainActivity.class));
+            Toasty.success(MainActivity.this, "Successfully Refreshed", 300).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -508,7 +519,7 @@ public class MainActivity extends AppCompatActivity
                 AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
                 try {
                     Looper.prepare();
-                    listing = getObjectslistFromFolder("helmata", "Jude");
+                    listing = getObjectslistFromFolder("helmata", getUsername);
                     Looper.loop();
                 }
                 catch (Exception e) {

@@ -95,7 +95,7 @@ public class Gallery extends ListActivity {
 
         ArrayList<String> myList = (ArrayList<String>) getIntent().getSerializableExtra("mylist");
         if(myList == null || myList.size() < 1){
-            Toasty.error(Gallery.this, "Empty. Internet Connection is Required.", Toast.LENGTH_LONG).show();
+            Toasty.error(Gallery.this, "Check your Connection or Username", Toast.LENGTH_LONG).show();
         } else {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(Gallery.this, android.R.layout.simple_list_item_1,
                     myList);
