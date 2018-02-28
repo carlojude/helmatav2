@@ -58,6 +58,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -203,8 +204,16 @@ public class MainActivity extends AppCompatActivity
                 final File theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
 
 
+                String getDate = filename.toString().substring(0, filename.toString().indexOf("_"));
+                String getTime = theFile.toString().substring(item.lastIndexOf("_")+1);
+                String getExtension = theFile.toString().substring(item.lastIndexOf(".")+1);
+                String getName = filename.toString().substring(0, filename.toString().indexOf("."));
+                long getSize = theFile.length()/1024/1024;
+
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(filename);
+                builder.setTitle(filename.toUpperCase());
+                builder.setMessage("Name: " + getName + "\nSize: " + getSize + "mb" + "\nType: " + getExtension.toUpperCase() +
+                        "\nDate Created: " + getDate  );
 //                builder.setSingleChoiceItems(items, -1,
 //                        new DialogInterface.OnClickListener() {
 //                            public void onClick(DialogInterface dialog, int item) {
