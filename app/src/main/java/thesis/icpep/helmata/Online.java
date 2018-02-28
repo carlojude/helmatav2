@@ -238,9 +238,12 @@ public class Online extends AppCompatActivity {
                                 REQUEST_PERMISSIONS);
                     }
                 } else {
+                    Toasty.info(Online.this, "Recording..", 300).show();
                     initRecorder();
                     shareScreen();
                     finalFab.setVisibility(View.GONE);
+                    orientationBtn.setVisibility(View.GONE);
+                    portrait.setVisibility(View.GONE);
 //                    fabStop.setVisibility(View.VISIBLE);
                 }
             }
@@ -257,12 +260,21 @@ public class Online extends AppCompatActivity {
                 fabStop.setVisibility(View.GONE);
                 finalFab.setVisibility(View.VISIBLE);
 
+                if (orientation == Configuration.ORIENTATION_PORTRAIT){
+                    orientationBtn.setVisibility(View.VISIBLE);
+                }
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    portrait.setVisibility(View.VISIBLE);
+                }
+
                 theFile = new File(Environment.getExternalStorageDirectory(), "Helmata/" + filename);
                 if(theFile.exists()){
                     upload();
                 } else {
                     Toast.makeText(getApplicationContext(), "No such file!", Toast.LENGTH_SHORT).show();
                 }
+
+
 
             }
         });
@@ -450,6 +462,13 @@ public class Online extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        startActivity(new Intent(Online.this,MainActivity.class));
     }
 
     //upload video to amazon s3 bucket

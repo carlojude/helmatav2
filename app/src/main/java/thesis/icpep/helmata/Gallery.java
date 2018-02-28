@@ -101,7 +101,7 @@ public class Gallery extends ListActivity {
 
                 //dialog to download
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Gallery.this);
-                builder.setTitle("Download");
+                builder.setTitle("Download?");
 
 //                final EditText input = new EditText(Gallery.this);
 //                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -123,10 +123,11 @@ public class Gallery extends ListActivity {
                     }
                 });
 
-//                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                    }
-//                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
 
                 AlertDialog alert = builder.create();
                 alert.show();
@@ -137,8 +138,8 @@ public class Gallery extends ListActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(Gallery.this,MainActivity.class));
         finish();
+        startActivity(new Intent(Gallery.this,MainActivity.class));
     }
 
     //download video from amazon bucket

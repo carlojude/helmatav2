@@ -88,7 +88,6 @@ public class Offline extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_online);
 
         final int orientation = this.getResources().getConfiguration().orientation;
@@ -219,10 +218,14 @@ public class Offline extends AppCompatActivity {
                                 REQUEST_PERMISSIONS);
                     }
                 } else {
+                    Toasty.info(Offline.this, "Recording..", 300).show();
                     initRecorder();
                     shareScreen();
                     finalFab.setVisibility(View.GONE);
+                    orientationBtn.setVisibility(View.GONE);
+                    portrait.setVisibility(View.GONE);
 //                    fabStop.setVisibility(View.VISIBLE);
+
                 }
             }
         });
@@ -237,7 +240,13 @@ public class Offline extends AppCompatActivity {
                 stopScreenSharing();
                 fabStop.setVisibility(View.GONE);
                 finalFab.setVisibility(View.VISIBLE);
-                Toasty.success(Offline.this, "Video has been saved.", Toast.LENGTH_LONG).show();
+                if (orientation == Configuration.ORIENTATION_PORTRAIT){
+                    orientationBtn.setVisibility(View.VISIBLE);
+                }
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    portrait.setVisibility(View.VISIBLE);
+                }
+                Toasty.success(Offline.this, "Recording has been saved.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -249,10 +258,10 @@ public class Offline extends AppCompatActivity {
 
                 if(fabStop1.getVisibility() == View.VISIBLE && fab1.getVisibility() == View.GONE){
                     fabStop1.setVisibility(View.GONE);
+
                 } else if(fab1.getVisibility() == View.GONE && fab1.getVisibility() == View.GONE){
                     fabStop1.setVisibility(View.VISIBLE);
                 }
-
                 return false;
             }
         });
@@ -443,8 +452,8 @@ public class Offline extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(Offline.this,MainActivity.class));
         finish();
+        startActivity(new Intent(Offline.this,MainActivity.class));
     }
 
     //    if(getResources().getDisplayMetrics().widthPixels>getResources().getDisplayMetrics().
